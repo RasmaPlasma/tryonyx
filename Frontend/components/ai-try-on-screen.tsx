@@ -49,16 +49,6 @@ export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
             <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground text-xs">You</Badge>
             <Badge className="absolute top-3 right-3 bg-accent text-accent-foreground text-xs">Anna</Badge>
           </div>
-          <div className="grid grid-cols-2 gap-4 text-center">
-            <div>
-              <p className="text-sm font-medium text-card-foreground">You in Anna's jacket</p>
-              <p className="text-xs text-muted-foreground">Perfect fit!</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-card-foreground">Anna in your dress</p>
-              <p className="text-xs text-muted-foreground">Looks amazing!</p>
-            </div>
-          </div>
         </Card>
 
         {/* AI Confidence */}
@@ -144,7 +134,7 @@ export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
               <span>Processing Swap...</span>
             </div>
           ) : (
-            "Propose Swap"
+            "Swap Styles"
           )}
         </Button>
       </div>
