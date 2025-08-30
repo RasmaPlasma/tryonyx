@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { AITryOnScreen } from "./ai-try-on-screen"
 import { SwapSuggestionsScreen } from "./swap-suggestions-screen"
-import { Bell, User, Plus, Heart, MessageCircle, Users } from "lucide-react"
+import { Bell, User, Plus, Heart, Users } from "lucide-react"
 
 type MyItem = {
     id: number
@@ -23,7 +23,7 @@ export function WardrobeScreen() {
     const [wardrobeView, setWardrobeView] = useState<"my" | "others">("my")
     const [selectedItem, setSelectedItem] = useState<MyItem | OtherItem | null>(null)
 
-// --- My Wardrobe (uses your public images) ---
+    // --- My Wardrobe ---
     const [myWardrobeItems, setMyWardrobeItems] = useState<MyItem[]>([
         { id: 1, name: "Black T-Shirt", image: "/blackTshirt.jpg", likes: 12 },
         { id: 2, name: "Green Pants", image: "/greenpants.jpg", likes: 8 },
@@ -33,13 +33,12 @@ export function WardrobeScreen() {
         { id: 6, name: "Pants", image: "/pants.jpg", likes: 11 },
     ])
 
-// --- Community Wardrobe (also from your public folder) ---
+    // --- Community Wardrobe ---
     const othersWardrobeItems: OtherItem[] = [
-        { id: 7,  name: "Brown Pants",   image: "/brownpants.jpg",   likes: 24, owner: "Sarah M." },
-        { id: 8,  name: "Clothing Set",  image: "/clothing.jpg",     likes: 18, owner: "Emma K." },
-        { id: 9,  name: "Green Bomber",  image: "/greenbomber.jpg",  likes: 16, owner: "Alex R." },
-        { id: 10, name: "Windbreaker",   image: "/windbreaker.jpg",  likes: 13, owner: "Lisa T." },
-        // extras from your list to keep variety:
+        { id: 7, name: "Brown Pants", image: "/brownpants.jpg", likes: 24, owner: "Sarah M." },
+        { id: 8, name: "Clothing Set", image: "/clothing.jpg", likes: 18, owner: "Emma K." },
+        { id: 9, name: "Green Bomber", image: "/greenbomber.jpg", likes: 16, owner: "Alex R." },
+        { id: 10, name: "Windbreaker", image: "/windbreaker.jpg", likes: 13, owner: "Lisa T." },
     ]
 
     const wardrobeItems = useMemo(
@@ -83,10 +82,12 @@ export function WardrobeScreen() {
     }
 
     if (currentScreen === "try-on") {
-        return <AITryOnScreen
-            onBack={() => setCurrentScreen("wardrobe")}
-            selectedItem={selectedItem}
-        />
+        return (
+            <AITryOnScreen
+                onBack={() => setCurrentScreen("wardrobe")}
+                selectedItem={selectedItem}
+            />
+        )
     }
 
     if (currentScreen === "suggestions") {
@@ -96,7 +97,17 @@ export function WardrobeScreen() {
     return (
         <div className="min-h-screen bg-background">
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-border">
+            <div className="relative flex items-center justify-between border-b border-border h-[10vh] px-4">
+                {/* centered logo */}
+                <div className="absolute left-1/2 -translate-x-1/2">
+                    <img
+                        src="/logo (2).png"
+                        alt="Mirrora"
+                        className="h-[12vh] w-auto object-contain"
+                    />
+                </div>
+
+                {/* left side */}
                 <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                         <User className="w-4 h-4 text-primary-foreground" />
@@ -108,6 +119,8 @@ export function WardrobeScreen() {
                         <p className="text-xs text-muted-foreground">{wardrobeItems.length} items available</p>
                     </div>
                 </div>
+
+                {/* right side */}
                 <div className="flex items-center space-x-2">
                     <Button
                         variant={wardrobeView === "others" ? "default" : "ghost"}
@@ -127,15 +140,12 @@ export function WardrobeScreen() {
                             </>
                         )}
                     </Button>
-                    {/* Message icon removed */}
-                    {/* <Button variant="ghost" size="sm" onClick={() => setCurrentScreen("suggestions")} className="text-muted-foreground">
-            <MessageCircle className="w-4 h-4" />
-          </Button> */}
                     <Button variant="ghost" size="sm" className="text-muted-foreground">
                         <Bell className="w-4 h-4" />
                     </Button>
                 </div>
             </div>
+
 
             {/* Wardrobe Grid */}
             <div className="p-4">
@@ -157,7 +167,6 @@ export function WardrobeScreen() {
                                     </div>
 
                                     {wardrobeView === "my" ? (
-                                        // ✅ NOW: Try On + Remove for MY items
                                         <div className="flex items-center gap-2">
                                             <Button
                                                 size="sm"
