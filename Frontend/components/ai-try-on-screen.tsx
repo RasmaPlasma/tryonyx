@@ -14,17 +14,55 @@ interface AITryOnScreenProps {
 export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
   const [currentScreen, setCurrentScreen] = useState<"try-on" | "impact">("try-on")
   const [isProcessing, setIsProcessing] = useState(false)
+  const [resultImage, setResultImage] = useState<string | null>(null)
 
   if (currentScreen === "impact") {
     return <ImpactScreen onBack={onBack} />
   }
 
-  const handleProposeSwap = () => {
+  const handleProposeSwap = async () => {
     setIsProcessing(true)
-    setTimeout(() => {
+    setResultImage(null)
+
+    try {
+      // Convert image URLs to File objects for the API call
+      const person1Response = await fetch('/person-wearing-red-jacket.png')
+      const person1Blob = await person1Response.blob()
+      const person1File = new File([person1Blob], 'person1.png', { type: 'image/png' })
+
+      const person2Response = await fetch('/person-wearing-white-dress.png')
+      const person2Blob = await person2Response.blob()
+      const person2File = new File([person2Blob], 'person2.png', { type: 'image/png' })
+
+      // Create FormData for the API call
+      const formData = new FormData()
+      formData.append('person1', person1File)
+      formData.append('person2', person2File)
+
+      // Call the swap API
+      const response = await fetch('http://localhost:3001/api/swap', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        throw new Error(`API call failed: ${response.status}`)
+      }
+
+      const data = await response.json()
+
+      if (data.success && data.resultUrl) {
+        setResultImage(data.resultUrl)
+      } else {
+        throw new Error('API response did not contain result URL')
+      }
+
+    } catch (error) {
+      console.error('Error calling swap API:', error)
+      // You might want to show an error message to the user here
+    } finally {
       setIsProcessing(false)
-      // Stay on try-on screen instead of navigating to impact
-    }, 2000)
+    }
   }
 
   return (
@@ -42,7 +80,7 @@ export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
 
       {/* AI Try-On Interface */}
       <div className="p-4 space-y-4 pb-24">
-        {/* Split View or Loading */}
+        {/* Split View, Loading, or Result */}
         {isProcessing ? (
           <div className="flex flex-col items-center justify-center py-16 space-y-4">
             <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
@@ -50,6 +88,23 @@ export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
               <p className="text-lg font-semibold text-foreground">Processing Swap...</p>
               <p className="text-sm text-muted-foreground">AI is analyzing the style compatibility</p>
             </div>
+          </div>
+        ) : resultImage ? (
+          <div className="flex flex-col items-center space-y-4">
+            <Card className="p-4 bg-card border-border w-full max-w-sm">
+              <div className="aspect-[3/4] bg-muted rounded-lg overflow-hidden relative">
+                <img src={resultImage} alt="AI Swap Result" className="w-full h-full object-cover" />
+                <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs">AI Result</Badge>
+              </div>
+              <p className="text-sm text-center text-card-foreground font-medium mt-2">Style Swap Complete!</p>
+            </Card>
+            <Button
+              variant="outline"
+              onClick={() => setResultImage(null)}
+              className="text-sm"
+            >
+              Try Another Swap
+            </Button>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3">
@@ -155,6 +210,8 @@ export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
               <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
               <span>Processing Swap...</span>
             </div>
+          ) : resultImage ? (
+            "Swap Again"
           ) : (
             "Swap Styles"
           )}
