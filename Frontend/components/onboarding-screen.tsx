@@ -21,8 +21,8 @@ export function OnboardingScreen() {
           <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
             <Leaf className="w-8 h-8 text-primary-foreground" />
           </div>
-          <h1 className="text-3xl font-bold text-foreground">Cloth AI</h1>
-          <p className="text-muted-foreground text-sm">Sustainable Fashion Exchange</p>
+          <h1 className="text-3xl font-bold text-foreground">Mirrora</h1>
+          <p className="text-muted-foreground text-sm">Try on clothes and sustainably exchange fashion</p>
         </div>
 
         {/* Hero Illustration */}
