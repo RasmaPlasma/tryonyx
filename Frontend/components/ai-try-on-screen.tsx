@@ -110,14 +110,14 @@ export function AITryOnScreen({ onBack, selectedItem }: AITryOnScreenProps) {
                 <img src={resultImage} alt="AI Swap Result" className="w-full h-full object-cover" />
                 <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs">AI Result</Badge>
               </div>
-              <p className="text-sm text-center text-card-foreground font-medium mt-2">Style Swap Complete!</p>
+              <p className="text-sm text-center text-card-foreground font-medium mt-2">AI Try-On completed!</p>
             </Card>
             <Button
               variant="outline"
               onClick={() => setResultImage(null)}
               className="text-sm"
             >
-              Try Another Swap
+              Try Another Try-On
             </Button>
           </div>
         ) : (
@@ -236,12 +236,12 @@ export function AITryOnScreen({ onBack, selectedItem }: AITryOnScreenProps) {
           ) : isProcessing ? (
             <div className="flex items-center space-x-2">
               <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-              <span>Processing Swap...</span>
+              <span>Processing Try-On...</span>
             </div>
           ) : resultImage ? (
-            "Swap Again"
+            "Try On Again"
           ) : (
-            "Swap Styles"
+            "Try On"
           )}
         </Button>
       </div>
