@@ -41,7 +41,7 @@ export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
       </div>
 
       {/* AI Try-On Interface */}
-      <div className="p-4 space-y-4">
+      <div className="p-4 space-y-4 pb-24">
         {/* Split View */}
         <div className="grid grid-cols-2 gap-3">
           {/* You */}
@@ -134,7 +134,7 @@ export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
       </div>
 
       {/* Action Button */}
-      <div className="fixed bottom-6 left-4 right-4">
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t border-border">
         <Button
           onClick={handleProposeSwap}
           disabled={isProcessing}
