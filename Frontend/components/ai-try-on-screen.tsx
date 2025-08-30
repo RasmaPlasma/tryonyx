@@ -42,14 +42,26 @@ export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
 
       {/* AI Try-On Interface */}
       <div className="p-4 space-y-4 pb-24">
-        {/* Combined Try-On View */}
-        <Card className="p-4 bg-card border-border">
-          <div className="aspect-[4/3] bg-muted rounded-lg mb-3 overflow-hidden relative">
-            <img src="/combined-try-on.png" alt="AI Try-on results showing both people" className="w-full h-full object-cover" />
-            <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground text-xs">You</Badge>
-            <Badge className="absolute top-3 right-3 bg-accent text-accent-foreground text-xs">Anna</Badge>
-          </div>
-        </Card>
+        {/* Split View */}
+        <div className="grid grid-cols-2 gap-3">
+          {/* You */}
+          <Card className="p-3 bg-card border-border">
+            <div className="aspect-[3/4] bg-muted rounded-lg mb-2 overflow-hidden relative">
+              <img src="/person-wearing-red-jacket.png" alt="You in their jacket" className="w-full h-full object-cover" />
+              <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs">You</Badge>
+            </div>
+            <p className="text-xs text-center text-card-foreground font-medium">You in Anna's jacket</p>
+          </Card>
+
+          {/* Friend */}
+          <Card className="p-3 bg-card border-border">
+            <div className="aspect-[3/4] bg-muted rounded-lg mb-2 overflow-hidden relative">
+              <img src="/person-wearing-white-dress.png" alt="Them in your dress" className="w-full h-full object-cover" />
+              <Badge className="absolute top-2 left-2 bg-accent text-accent-foreground text-xs">Anna</Badge>
+            </div>
+            <p className="text-xs text-center text-card-foreground font-medium">Anna in your dress</p>
+          </Card>
+        </div>
 
         {/* AI Confidence */}
         <Card className="p-4 bg-accent/5 border-accent/20">
