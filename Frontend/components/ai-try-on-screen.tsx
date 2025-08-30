@@ -41,27 +41,25 @@ export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
       </div>
 
       {/* AI Try-On Interface */}
-      <div className="p-4 space-y-4">
-        {/* Split View */}
-        <div className="grid grid-cols-2 gap-3">
-          {/* You */}
-          <Card className="p-3 bg-card border-border">
-            <div className="aspect-[3/4] bg-muted rounded-lg mb-2 overflow-hidden relative">
-              <img src="/person-wearing-red-jacket.png" alt="You in their jacket" className="w-full h-full object-cover" />
-              <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs">You</Badge>
+      <div className="p-4 space-y-4 pb-24">
+        {/* Combined Try-On View */}
+        <Card className="p-4 bg-card border-border">
+          <div className="aspect-[4/3] bg-muted rounded-lg mb-3 overflow-hidden relative">
+            <img src="/combined-try-on.png" alt="AI Try-on results showing both people" className="w-full h-full object-cover" />
+            <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground text-xs">You</Badge>
+            <Badge className="absolute top-3 right-3 bg-accent text-accent-foreground text-xs">Anna</Badge>
+          </div>
+          <div className="grid grid-cols-2 gap-4 text-center">
+            <div>
+              <p className="text-sm font-medium text-card-foreground">You in Anna's jacket</p>
+              <p className="text-xs text-muted-foreground">Perfect fit!</p>
             </div>
-            <p className="text-xs text-center text-card-foreground font-medium">You in Anna's jacket</p>
-          </Card>
-
-          {/* Friend */}
-          <Card className="p-3 bg-card border-border">
-            <div className="aspect-[3/4] bg-muted rounded-lg mb-2 overflow-hidden relative">
-              <img src="/person-wearing-white-dress.png" alt="Them in your dress" className="w-full h-full object-cover" />
-              <Badge className="absolute top-2 left-2 bg-accent text-accent-foreground text-xs">Anna</Badge>
+            <div>
+              <p className="text-sm font-medium text-card-foreground">Anna in your dress</p>
+              <p className="text-xs text-muted-foreground">Looks amazing!</p>
             </div>
-            <p className="text-xs text-center text-card-foreground font-medium">Anna in your dress</p>
-          </Card>
-        </div>
+          </div>
+        </Card>
 
         {/* AI Confidence */}
         <Card className="p-4 bg-accent/5 border-accent/20">
@@ -134,7 +132,7 @@ export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
       </div>
 
       {/* Action Button */}
-      <div className="fixed bottom-6 left-4 right-4">
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t border-border">
         <Button
           onClick={handleProposeSwap}
           disabled={isProcessing}
