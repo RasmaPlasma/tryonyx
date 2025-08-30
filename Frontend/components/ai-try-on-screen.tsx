@@ -38,7 +38,7 @@ export function AITryOnScreen({ onBack, selectedItem }: AITryOnScreenProps) {
 
     try {
       // Convert image URLs to File objects for the API call
-      const person1Response = await fetch('/person-wearing-red-jacket.png')
+      const person1Response = await fetch('/mario.png')
       const person1Blob = await person1Response.blob()
       const person1File = new File([person1Blob], 'person1.png', { type: 'image/png' })
 
@@ -125,7 +125,7 @@ export function AITryOnScreen({ onBack, selectedItem }: AITryOnScreenProps) {
             {/* You */}
             <Card className="p-3 bg-card border-border">
               <div className="aspect-[3/4] bg-muted rounded-lg mb-2 overflow-hidden relative">
-                <img src="/person-wearing-red-jacket.png" alt="You wearing selected item" className="w-full h-full object-cover" />
+                <img src="/mario.png" alt="You wearing selected item" className="w-full h-full object-cover" />
                 <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs">You</Badge>
               </div>
               <p className="text-xs text-center text-card-foreground font-medium">
