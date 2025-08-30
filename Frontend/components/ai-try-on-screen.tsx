@@ -7,11 +7,21 @@ import { Badge } from "@/components/ui/badge"
 import { ImpactScreen } from "./impact-screen"
 import { ArrowLeft, Camera, Sparkles, Heart } from "lucide-react"
 
-interface AITryOnScreenProps {
-  onBack: () => void
+type WardrobeItem = {
+  id: number
+  name: string
+  image: string
+  likes: number
+  owner?: string
+  __localUrl?: string
 }
 
-export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
+interface AITryOnScreenProps {
+  onBack: () => void
+  selectedItem: WardrobeItem | null
+}
+
+export function AITryOnScreen({ onBack, selectedItem }: AITryOnScreenProps) {
   const [currentScreen, setCurrentScreen] = useState<"try-on" | "impact">("try-on")
   const [isProcessing, setIsProcessing] = useState(false)
   const [resultImage, setResultImage] = useState<string | null>(null)
@@ -21,6 +31,8 @@ export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
   }
 
   const handleProposeSwap = async () => {
+    if (!selectedItem) return
+
     setIsProcessing(true)
     setResultImage(null)
 
@@ -30,9 +42,11 @@ export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
       const person1Blob = await person1Response.blob()
       const person1File = new File([person1Blob], 'person1.png', { type: 'image/png' })
 
-      const person2Response = await fetch('/person-wearing-white-dress.png')
+      // Use the selected item's image (handle both regular URLs and local blob URLs)
+      const clothingImageUrl = selectedItem.__localUrl || selectedItem.image
+      const person2Response = await fetch(clothingImageUrl)
       const person2Blob = await person2Response.blob()
-      const person2File = new File([person2Blob], 'person2.png', { type: 'image/png' })
+      const person2File = new File([person2Blob], 'clothing.png', { type: 'image/png' })
 
       // Create FormData for the API call
       const formData = new FormData()
@@ -111,19 +125,29 @@ export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
             {/* You */}
             <Card className="p-3 bg-card border-border">
               <div className="aspect-[3/4] bg-muted rounded-lg mb-2 overflow-hidden relative">
-                <img src="/person-wearing-red-jacket.png" alt="You in their jacket" className="w-full h-full object-cover" />
+                <img src="/person-wearing-red-jacket.png" alt="You wearing selected item" className="w-full h-full object-cover" />
                 <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs">You</Badge>
               </div>
-              <p className="text-xs text-center text-card-foreground font-medium">You in Anna's jacket</p>
+              <p className="text-xs text-center text-card-foreground font-medium">
+                You in {selectedItem?.owner ? `${selectedItem.owner}'s ${selectedItem.name}` : selectedItem?.name || 'selected item'}
+              </p>
             </Card>
 
-            {/* Friend */}
+            {/* Selected Item */}
             <Card className="p-3 bg-card border-border">
               <div className="aspect-[3/4] bg-muted rounded-lg mb-2 overflow-hidden relative">
-                <img src="/person-wearing-white-dress.png" alt="Them in your dress" className="w-full h-full object-cover" />
-                <Badge className="absolute top-2 left-2 bg-accent text-accent-foreground text-xs">Anna</Badge>
+                <img
+                  src={selectedItem?.image || "/placeholder.svg"}
+                  alt={selectedItem?.name || 'selected item'}
+                  className="w-full h-full object-cover"
+                />
+                <Badge className="absolute top-2 left-2 bg-accent text-accent-foreground text-xs">
+                  Selected Item
+                </Badge>
               </div>
-              <p className="text-xs text-center text-card-foreground font-medium">Anna in your dress</p>
+              <p className="text-xs text-center text-card-foreground font-medium">
+                {selectedItem?.name || 'Selected Item'}
+              </p>
             </Card>
           </div>
         )}
@@ -153,19 +177,21 @@ export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-muted rounded-lg">
                   <img
-                    src="/red-jacket.png"
-                    alt="Red jacket"
+                    src={selectedItem?.image || "/placeholder.svg"}
+                    alt={selectedItem?.name || "Selected item"}
                     className="w-full h-full object-cover rounded-lg"
                   />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-card-foreground">Your Red Jacket</p>
-                  <p className="text-xs text-muted-foreground">Size M • Zara</p>
+                  <p className="text-sm font-medium text-card-foreground">
+                    {selectedItem?.owner ? `${selectedItem.owner}'s ${selectedItem.name}` : `Your ${selectedItem?.name || 'Item'}`}
+                  </p>
+                  <p className="text-xs text-muted-foreground">Size M • Brand</p>
                 </div>
               </div>
               <div className="flex items-center space-x-1">
                 <Heart className="w-3 h-3 text-accent" />
-                <span className="text-xs text-muted-foreground">12</span>
+                <span className="text-xs text-muted-foreground">{selectedItem?.likes || 0}</span>
               </div>
             </div>
 
@@ -180,13 +206,13 @@ export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
                 <div className="w-10 h-10 bg-muted rounded-lg">
                   <img
                     src="/white-dress.png"
-                    alt="White dress"
+                    alt="Your item for swap"
                     className="w-full h-full object-cover rounded-lg"
                   />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-card-foreground">Anna's White Dress</p>
-                  <p className="text-xs text-muted-foreground">Size M • H&M</p>
+                  <p className="text-sm font-medium text-card-foreground">Your Item</p>
+                  <p className="text-xs text-muted-foreground">Size M • Brand</p>
                 </div>
               </div>
               <div className="flex items-center space-x-1">
@@ -202,10 +228,12 @@ export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t border-border">
         <Button
           onClick={handleProposeSwap}
-          disabled={isProcessing}
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 rounded-lg"
+          disabled={isProcessing || !selectedItem}
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 rounded-lg disabled:opacity-50"
         >
-          {isProcessing ? (
+          {!selectedItem ? (
+            "No Item Selected"
+          ) : isProcessing ? (
             <div className="flex items-center space-x-2">
               <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
               <span>Processing Swap...</span>

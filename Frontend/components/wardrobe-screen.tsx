@@ -21,6 +21,7 @@ export function WardrobeScreen() {
     const [currentScreen, setCurrentScreen] =
         useState<"wardrobe" | "try-on" | "suggestions">("wardrobe")
     const [wardrobeView, setWardrobeView] = useState<"my" | "others">("my")
+    const [selectedItem, setSelectedItem] = useState<MyItem | OtherItem | null>(null)
 
 // --- My Wardrobe (uses your public images) ---
     const [myWardrobeItems, setMyWardrobeItems] = useState<MyItem[]>([
@@ -82,7 +83,10 @@ export function WardrobeScreen() {
     }
 
     if (currentScreen === "try-on") {
-        return <AITryOnScreen onBack={() => setCurrentScreen("wardrobe")} />
+        return <AITryOnScreen
+            onBack={() => setCurrentScreen("wardrobe")}
+            selectedItem={selectedItem}
+        />
     }
 
     if (currentScreen === "suggestions") {
@@ -159,7 +163,10 @@ export function WardrobeScreen() {
                                                 size="sm"
                                                 variant="outline"
                                                 className="text-xs px-2 py-1 h-6"
-                                                onClick={() => setCurrentScreen("try-on")}
+                                                onClick={() => {
+                                                    setSelectedItem(item)
+                                                    setCurrentScreen("try-on")
+                                                }}
                                             >
                                                 Try On
                                             </Button>
@@ -176,7 +183,10 @@ export function WardrobeScreen() {
                                         <Button
                                             size="sm"
                                             variant="outline"
-                                            onClick={() => setCurrentScreen("try-on")}
+                                            onClick={() => {
+                                                setSelectedItem(item)
+                                                setCurrentScreen("try-on")
+                                            }}
                                             className="text-xs px-2 py-1 h-6"
                                         >
                                             Try On
