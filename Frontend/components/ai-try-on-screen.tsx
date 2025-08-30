@@ -36,11 +36,11 @@ export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
 
       // Create FormData for the API call
       const formData = new FormData()
-      formData.append('person1', person1File)
-      formData.append('person2', person2File)
+      formData.append('person', person1File)
+      formData.append('clothing', person2File)
 
       // Call the swap API
-      const response = await fetch('http://localhost:3001/api/swap', {
+      const response = await fetch('http://localhost:3001/api/tryon', {
         method: 'POST',
         body: formData,
       })
