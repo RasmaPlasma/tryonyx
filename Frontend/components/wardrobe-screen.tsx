@@ -22,22 +22,23 @@ export function WardrobeScreen() {
         useState<"wardrobe" | "try-on" | "suggestions">("wardrobe")
     const [wardrobeView, setWardrobeView] = useState<"my" | "others">("my")
 
+// --- My Wardrobe (uses your public images) ---
     const [myWardrobeItems, setMyWardrobeItems] = useState<MyItem[]>([
-        { id: 1, name: "Red Jacket", image: "/red-jacket-fashion.png", likes: 12 },
-        { id: 2, name: "Blue Jeans", image: "/blue-jeans-denim.png", likes: 8 },
-        { id: 3, name: "White Dress", image: "/white-summer-dress.png", likes: 15 },
-        { id: 4, name: "Black Sweater", image: "/black-knit-sweater.png", likes: 6 },
-        { id: 5, name: "Green Skirt", image: "/green-midi-skirt.png", likes: 9 },
-        { id: 6, name: "Brown Boots", image: "/brown-leather-boots.png", likes: 11 },
+        { id: 1, name: "Black T-Shirt", image: "/blackTshirt.jpg", likes: 12 },
+        { id: 2, name: "Green Pants", image: "/greenpants.jpg", likes: 8 },
+        { id: 3, name: "Green Sweater", image: "/GreenSweater.jpg", likes: 15 },
+        { id: 4, name: "Jumper", image: "/jumper.jpg", likes: 6 },
+        { id: 5, name: "Linen Pants", image: "/linenpants.jpg", likes: 9 },
+        { id: 6, name: "Pants", image: "/pants.jpg", likes: 11 },
     ])
 
+// --- Community Wardrobe (also from your public folder) ---
     const othersWardrobeItems: OtherItem[] = [
-        { id: 7, name: "Vintage Blazer", image: "/vintage-blazer.png", likes: 24, owner: "Sarah M." },
-        { id: 8, name: "Floral Dress", image: "/floral-summer-dress.png", likes: 18, owner: "Emma K." },
-        { id: 9, name: "Denim Jacket", image: "/classic-denim-jacket.png", likes: 16, owner: "Alex R." },
-        { id: 10, name: "Silk Scarf", image: "/flowing-silk-scarf.png", likes: 13, owner: "Lisa T." },
-        { id: 11, name: "Leather Bag", image: "/leather-handbag.png", likes: 21, owner: "Maya P." },
-        { id: 12, name: "Wool Coat", image: "/wool-winter-coat.png", likes: 19, owner: "Zoe L." },
+        { id: 7,  name: "Brown Pants",   image: "/brownpants.jpg",   likes: 24, owner: "Sarah M." },
+        { id: 8,  name: "Clothing Set",  image: "/clothing.jpg",     likes: 18, owner: "Emma K." },
+        { id: 9,  name: "Green Bomber",  image: "/greenbomber.jpg",  likes: 16, owner: "Alex R." },
+        { id: 10, name: "Windbreaker",   image: "/windbreaker.jpg",  likes: 13, owner: "Lisa T." },
+        // extras from your list to keep variety:
     ]
 
     const wardrobeItems = useMemo(
