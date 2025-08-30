@@ -110,14 +110,14 @@ export function AITryOnScreen({ onBack, selectedItem }: AITryOnScreenProps) {
                 <img src={resultImage} alt="AI Swap Result" className="w-full h-full object-cover" />
                 <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs">AI Result</Badge>
               </div>
-              <p className="text-sm text-center text-card-foreground font-medium mt-2">Style Swap Complete!</p>
+              <p className="text-sm text-center text-card-foreground font-medium mt-2">AI Try-On completed!</p>
             </Card>
             <Button
               variant="outline"
               onClick={() => setResultImage(null)}
               className="text-sm"
             >
-              Try Another Swap
+              Try Another Try-On
             </Button>
           </div>
         ) : (
@@ -194,32 +194,6 @@ export function AITryOnScreen({ onBack, selectedItem }: AITryOnScreenProps) {
                 <span className="text-xs text-muted-foreground">{selectedItem?.likes || 0}</span>
               </div>
             </div>
-
-            <div className="flex justify-center">
-              <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                <span className="text-primary text-sm">⇄</span>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-muted rounded-lg">
-                  <img
-                    src="/white-dress.png"
-                    alt="Your item for swap"
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-card-foreground">Your Item</p>
-                  <p className="text-xs text-muted-foreground">Size M • Brand</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Heart className="w-3 h-3 text-accent" />
-                <span className="text-xs text-muted-foreground">15</span>
-              </div>
-            </div>
           </div>
         </Card>
       </div>
@@ -236,12 +210,12 @@ export function AITryOnScreen({ onBack, selectedItem }: AITryOnScreenProps) {
           ) : isProcessing ? (
             <div className="flex items-center space-x-2">
               <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-              <span>Processing Swap...</span>
+              <span>Processing Try-On...</span>
             </div>
           ) : resultImage ? (
-            "Swap Again"
+            "Try On Again"
           ) : (
-            "Swap Styles"
+            "Try On"
           )}
         </Button>
       </div>
