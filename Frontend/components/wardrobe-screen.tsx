@@ -13,7 +13,6 @@ type MyItem = {
     name: string
     image: string
     likes: number
-    // for local uploads so we can revoke the blob URL on removal
     __localUrl?: string
 }
 type OtherItem = { id: number; name: string; image: string; likes: number; owner: string }
@@ -46,29 +45,24 @@ export function WardrobeScreen() {
         [wardrobeView, myWardrobeItems]
     )
 
-    // --- Remove ---
+    // Remove
     const handleRemove = (id: number) => {
         setMyWardrobeItems(prev => {
             const toRemove = prev.find(i => i.id === id)
-            // revoke blob URL if we created one
             if (toRemove?.__localUrl) URL.revokeObjectURL(toRemove.__localUrl)
             return prev.filter(item => item.id !== id)
         })
     }
 
-    // --- Add (from file) ---
+    // Add (from file)
     const fileInputRef = useRef<HTMLInputElement | null>(null)
 
     const deriveTitleFromFilename = (filename: string) => {
-        // remove the extension
         const withoutExt = filename.replace(/\.[^.]+$/i, "")
-        // replace separators with spaces, trim, and UPPERCASE
         return withoutExt.replace(/[-_]+/g, " ").trim().toUpperCase()
     }
 
-    const onPickFile = () => {
-        fileInputRef.current?.click()
-    }
+    const onPickFile = () => fileInputRef.current?.click()
 
     const onFileSelected: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         const file = e.target.files?.[0]
@@ -78,20 +72,11 @@ export function WardrobeScreen() {
         const title = deriveTitleFromFilename(file.name)
 
         setMyWardrobeItems(prev => [
-            {
-                id: Date.now(), // simple unique id
-                name: title,
-                image: url,
-                likes: 0,
-                __localUrl: url,
-            },
-            ...prev, // add to the top; change order if you prefer bottom
+            { id: Date.now(), name: title, image: url, likes: 0, __localUrl: url },
+            ...prev,
         ])
 
-        // make sure the user sees it in "My" view
         setWardrobeView("my")
-
-        // reset input so selecting the same file again still fires change
         e.currentTarget.value = ""
     }
 
@@ -137,14 +122,10 @@ export function WardrobeScreen() {
                             </>
                         )}
                     </Button>
-                    {/*<Button*/}
-                    {/*    variant="ghost"*/}
-                    {/*    size="sm"*/}
-                    {/*    onClick={() => setCurrentScreen("suggestions")}*/}
-                    {/*    className="text-muted-foreground"*/}
-                    {/*>*/}
-                    {/*    <MessageCircle className="w-4 h-4" />*/}
-                    {/*</Button>*/}
+                    {/* Message icon removed */}
+                    {/* <Button variant="ghost" size="sm" onClick={() => setCurrentScreen("suggestions")} className="text-muted-foreground">
+            <MessageCircle className="w-4 h-4" />
+          </Button> */}
                     <Button variant="ghost" size="sm" className="text-muted-foreground">
                         <Bell className="w-4 h-4" />
                     </Button>
@@ -171,14 +152,25 @@ export function WardrobeScreen() {
                                     </div>
 
                                     {wardrobeView === "my" ? (
-                                        <Button
-                                            size="sm"
-                                            variant="outline"
-                                            className="text-xs px-2 py-1 h-6 bg-transparent"
-                                            onClick={() => handleRemove((item as MyItem).id)}
-                                        >
-                                            Remove
-                                        </Button>
+                                        // ✅ NOW: Try On + Remove for MY items
+                                        <div className="flex items-center gap-2">
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                className="text-xs px-2 py-1 h-6"
+                                                onClick={() => setCurrentScreen("try-on")}
+                                            >
+                                                Try On
+                                            </Button>
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                className="text-xs px-2 py-1 h-6 bg-transparent"
+                                                onClick={() => handleRemove((item as MyItem).id)}
+                                            >
+                                                Remove
+                                            </Button>
+                                        </div>
                                     ) : (
                                         <Button
                                             size="sm"
