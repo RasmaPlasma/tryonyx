@@ -23,7 +23,7 @@ export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
     setIsProcessing(true)
     setTimeout(() => {
       setIsProcessing(false)
-      setCurrentScreen("impact")
+      // Stay on try-on screen instead of navigating to impact
     }, 2000)
   }
 
@@ -42,26 +42,36 @@ export function AITryOnScreen({ onBack }: AITryOnScreenProps) {
 
       {/* AI Try-On Interface */}
       <div className="p-4 space-y-4 pb-24">
-        {/* Split View */}
-        <div className="grid grid-cols-2 gap-3">
-          {/* You */}
-          <Card className="p-3 bg-card border-border">
-            <div className="aspect-[3/4] bg-muted rounded-lg mb-2 overflow-hidden relative">
-              <img src="/person-wearing-red-jacket.png" alt="You in their jacket" className="w-full h-full object-cover" />
-              <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs">You</Badge>
+        {/* Split View or Loading */}
+        {isProcessing ? (
+          <div className="flex flex-col items-center justify-center py-16 space-y-4">
+            <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+            <div className="text-center space-y-2">
+              <p className="text-lg font-semibold text-foreground">Processing Swap...</p>
+              <p className="text-sm text-muted-foreground">AI is analyzing the style compatibility</p>
             </div>
-            <p className="text-xs text-center text-card-foreground font-medium">You in Anna's jacket</p>
-          </Card>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-3">
+            {/* You */}
+            <Card className="p-3 bg-card border-border">
+              <div className="aspect-[3/4] bg-muted rounded-lg mb-2 overflow-hidden relative">
+                <img src="/person-wearing-red-jacket.png" alt="You in their jacket" className="w-full h-full object-cover" />
+                <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs">You</Badge>
+              </div>
+              <p className="text-xs text-center text-card-foreground font-medium">You in Anna's jacket</p>
+            </Card>
 
-          {/* Friend */}
-          <Card className="p-3 bg-card border-border">
-            <div className="aspect-[3/4] bg-muted rounded-lg mb-2 overflow-hidden relative">
-              <img src="/person-wearing-white-dress.png" alt="Them in your dress" className="w-full h-full object-cover" />
-              <Badge className="absolute top-2 left-2 bg-accent text-accent-foreground text-xs">Anna</Badge>
-            </div>
-            <p className="text-xs text-center text-card-foreground font-medium">Anna in your dress</p>
-          </Card>
-        </div>
+            {/* Friend */}
+            <Card className="p-3 bg-card border-border">
+              <div className="aspect-[3/4] bg-muted rounded-lg mb-2 overflow-hidden relative">
+                <img src="/person-wearing-white-dress.png" alt="Them in your dress" className="w-full h-full object-cover" />
+                <Badge className="absolute top-2 left-2 bg-accent text-accent-foreground text-xs">Anna</Badge>
+              </div>
+              <p className="text-xs text-center text-card-foreground font-medium">Anna in your dress</p>
+            </Card>
+          </div>
+        )}
 
         {/* AI Confidence */}
         <Card className="p-4 bg-accent/5 border-accent/20">
